@@ -1,5 +1,47 @@
+let canvas = document.getElementById("canvas");
 
-const canvas = document.querySelector("canvas"),
+canvas.width = canvas.offsetWidth;
+canvas.height = canvas.offsetHeight;
+
+var io = io.connect();
+
+let ctx = canvas.getContext("2d");
+
+let x;
+let y;
+let mouseDown = false;
+
+
+window.onmousedown = (e) => {
+  ctx.moveTo(x, y);
+  io.emit('down' , {x,y})
+  mouseDown = true;
+};
+
+window.onmouseup = (e) => {
+  mouseDown = false;
+};
+
+io.on('ondraw' , ({x,y}) => {
+    ctx.lineTo(x, y);
+    ctx.stroke();
+})
+
+io.on('ondown' , ({x,y}) => {
+    ctx.moveTo(x, y);
+})
+
+window.onmousemove = (e) => {
+  x = e.offsetX;
+  y = e.offsetY;
+
+  if (mouseDown) {
+    io.emit("draw", { x,y });
+    ctx.lineTo(x, y);
+    ctx.stroke();
+  }
+};
+/*const canvas = document.querySelector("canvas"),
 toolBtns = document.querySelectorAll(".tool"),
 fillColor = document.querySelector("#fill-color"),
 sizeSlider = document.querySelector("#size-slider"),
@@ -133,7 +175,7 @@ saveImg.addEventListener("click", () => {
 canvas.addEventListener("mousedown", startDraw);
 canvas.addEventListener("mousemove", drawing);
 canvas.addEventListener("mouseup", () => isDrawing = false);
-
+*/
 
 //TIMER
 function timer(){
@@ -177,7 +219,9 @@ btn.addEventListener('click', function(){
         "mango",
         "house",
         "ball",
-        "tree"
+        "tree",
+        "computer",
+        "juice"
     ];
     let disPlay = document.querySelector('.word');
     disPlay.innerHTML = arr[Math.floor(Math.random()*arr.length)];;
@@ -212,13 +256,12 @@ function join(){
 
 
 //chat
-const socket = io()
 let name;
 let textarea = document.querySelector('#textarea')
 let messageArea = document.querySelector('.message__area')
-do {
+ do {
     name = prompt('Please enter your name: ')
-} while(!name)
+ } while(!name)
 
 textarea.addEventListener('keyup', (e) => {
     if(e.key === 'Enter') {
@@ -237,7 +280,7 @@ function sendMessage(message) {
     scrollToBottom()
 
     // Send to server 
-    socket.emit('message', msg)
+    io.emit('message', msg)
 
 }
 
@@ -255,7 +298,7 @@ function appendMessage(msg, type) {
 }
 
 // Recieve messages 
-socket.on('message', (msg) => {
+io.on('message', (msg) => {
     appendMessage(msg, 'incoming')
     scrollToBottom()
 })
