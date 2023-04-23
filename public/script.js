@@ -1,5 +1,48 @@
 
-const canvas = document.querySelector("canvas"),
+let canvas = document.getElementById("canvas");
+
+canvas.width = 0.98 * window.innerWidth;
+canvas.height = window.innerHeight;
+
+var io = io.connect("https://localhost:8090/GamingArena.html");
+
+let ctx = canvas.getContext("2d");
+
+let x;
+let y;
+let mouseDown = false;
+
+
+window.onmousedown = (e) => {
+  ctx.moveTo(x, y);
+  io.emit('down' , {x,y})
+  mouseDown = true;
+};
+
+window.onmouseup = (e) => {
+  mouseDown = false;
+};
+
+io.on('ondraw' , ({x,y}) => {
+    ctx.lineTo(x, y);
+    ctx.stroke();
+})
+
+io.on('ondown' , ({x,y}) => {
+    ctx.moveTo(x, y);
+})
+
+window.onmousemove = (e) => {
+  x = e.clientX;
+  y = e.clientY;
+
+  if (mouseDown) {
+    io.emit("draw", { x,y });
+    ctx.lineTo(x, y);
+    ctx.stroke();
+  }
+};
+/*const canvas = document.querySelector("canvas"),
 toolBtns = document.querySelectorAll(".tool"),
 fillColor = document.querySelector("#fill-color"),
 sizeSlider = document.querySelector("#size-slider"),
@@ -133,7 +176,7 @@ saveImg.addEventListener("click", () => {
 canvas.addEventListener("mousedown", startDraw);
 canvas.addEventListener("mousemove", drawing);
 canvas.addEventListener("mouseup", () => isDrawing = false);
-
+*/
 
 //TIMER
 function timer(){
@@ -177,7 +220,9 @@ btn.addEventListener('click', function(){
         "mango",
         "house",
         "ball",
-        "tree"
+        "tree",
+        "computer",
+        "juice"
     ];
     let disPlay = document.querySelector('.word');
     disPlay.innerHTML = arr[Math.floor(Math.random()*arr.length)];;
@@ -216,9 +261,9 @@ const socket = io()
 let name;
 let textarea = document.querySelector('#textarea')
 let messageArea = document.querySelector('.message__area')
-do {
-    name = prompt('Please enter your name: ')
-} while(!name)
+// do {
+//     name = prompt('Please enter your name: ')
+// } while(!name)
 
 textarea.addEventListener('keyup', (e) => {
     if(e.key === 'Enter') {
