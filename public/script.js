@@ -211,6 +211,7 @@ function togglePopup(){
     document.getElementById("popup-1").classList.toggle("active");
 }
 
+let check;
 //Random word generator
 let btn = document.querySelector(".next");
 btn.addEventListener('click', function(){
@@ -224,9 +225,12 @@ btn.addEventListener('click', function(){
         "juice"
     ];
     let disPlay = document.querySelector('.word');
-    disPlay.innerHTML = arr[Math.floor(Math.random()*arr.length)];;
+
+    disPlay.innerHTML = arr[Math.floor(Math.random()*arr.length)];
+    check = disPlay.innerHTML;
     console.log(disPlay.innerHTML);
 })
+console.log("check = " + check);
 //display chosen word
 let chosen = document.querySelector(".done");
 chosen.addEventListener('click', function(){
@@ -237,7 +241,7 @@ chosen.addEventListener('click', function(){
     let text = w.charAt(0) + ' _ '.repeat(w.length - 2) + w.charAt(w.length - 1);
     word.innerHTML = text;
     console.log(word.innerHTML);
-
+    console.log("w = " + w);
     timer();
 
 })
@@ -268,8 +272,23 @@ textarea.addEventListener('keyup', (e) => {
         sendMessage(e.target.value)
     }
 })
+function check1(message){
+    let disPlay = document.querySelector('.word');
+    let w = disPlay.innerHTML;
+    console.log("w = " + w);
+    console.log("msg = " + message);
+    let crct = {
+        user: name,
+        message: '${name} guessed correctly'
+    }
+    if(message === w){
+        console.log("correct");
+        io.emit('message' , crct);
+    }
+}
 
 function sendMessage(message) {
+    check1(message);
     let msg = {
         user: name,
         message: message.trim()
@@ -278,6 +297,7 @@ function sendMessage(message) {
     appendMessage(msg, 'outgoing')
     textarea.value = ''
     scrollToBottom()
+    console.log(message);
 
     // Send to server 
     io.emit('message', msg)
