@@ -336,7 +336,7 @@ ul{
 }
 .scores{
     position: absolute;
-bottom: 0;
+    bottom: 0;
     background: rgba(172, 255, 47, 0);
     height: 14.5vh;
     width: 100%;
@@ -353,10 +353,10 @@ bottom: 0;
     border: 3px black solid;
 }
 
-/*chat*/
+/*chat
 .chat{
    
-}
+}*/
 section.chat__section {
     height: 100%;
     width: 100%;
@@ -367,24 +367,23 @@ section.chat__section {
 .brand {
    
     padding: 23px;
-    background: #f1f1f1;
+    background: #ffffff;
     display: flex;
     align-items: center;
     border: 3px solid black;
     border-radius: 22px 22px 0 0 ;
 }
 .brand h1 {
-    
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     text-transform: uppercase;
-    font-size: 20px;
-    color: #444;
+    font-size: 18px;
+    color: #141313;
     margin-left: 10px;
 }
 .message__area{
     border: 3px solid black;
-   margin-top: 3px;
-   margin-bottom: 3px;
-
+    margin-top: 3px;
+    margin-bottom: -3px;
     height: 77%;
     padding: 16px;
     display: flex;
@@ -403,7 +402,7 @@ textarea {
     padding: 18px;
     font-size: 16px;
     outline: none;
-    background: #FBFBFB;
+    background: #ffffff;
 }
 
 .message {
@@ -414,13 +413,13 @@ textarea {
     position: relative;
 }
 .incoming {
-    background: #f9e076;
-    color: #fff;  
+    background: #ffe460;
+    color: #ffffff;  
     font-weight: bolder;
 }
 .outgoing {
-    background: #dadada;
-    color: #fff;  
+    background: #ffb941;
+    color: #ffffff;  
     font-weight: bolder;
     margin-left: auto;
 }
