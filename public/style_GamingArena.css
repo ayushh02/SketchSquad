@@ -442,8 +442,15 @@ textarea {
     color: rgb(28, 231, 28);
 }
 .score{
-    background: crimson;
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    flex-direction: column;  
+    background: rgb(255, 210, 48);
+    border: 3px solid rgb(26, 26, 25);
+    color: rgb(23, 22, 22);
+    font-size: 18px;
+    width: 75px;
+    height: 75px;
+    border-radius: 50px;
 }
