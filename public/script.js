@@ -178,8 +178,9 @@ canvas.addEventListener("mouseup", () => isDrawing = false);
 */
 
 //TIMER
-function timer(){
-    let timeSecond = 60;
+function timer(time){
+    let timeSecond = time;
+   
 const timeH = document.querySelector("#timer");
 
 displayTime(timeSecond);
@@ -231,7 +232,9 @@ btn.addEventListener('click', function(){
     console.log(disPlay.innerHTML);
 })
 console.log("check = " + check);
+
 //display chosen word
+
 let chosen = document.querySelector(".done");
 chosen.addEventListener('click', function(){
     togglePopup();
@@ -239,12 +242,20 @@ chosen.addEventListener('click', function(){
     let word = document.querySelector('.chosen');
     let w = disPlay.innerHTML;
     let text = w.charAt(0) + ' _ '.repeat(w.length - 2) + w.charAt(w.length - 1);
-    word.innerHTML = text;
-    console.log(word.innerHTML);
-    console.log("w = " + w);
-    timer();
+    h1(word,w);
+    let timeSecond=60;
+    io.emit('time',timeSecond);
+    timer(timeSecond);
 
 })
+
+function h1(word,w){
+    let disPlay = document.querySelector('.word');
+    disPlay.innerHTML=w;
+    let text = w.charAt(0) + ' _ '.repeat(w.length - 2) + w.charAt(w.length - 1);
+    word.innerHTML = text;
+    io.emit("h1",w);
+}
 
 //JOIN
 
@@ -272,23 +283,39 @@ textarea.addEventListener('keyup', (e) => {
         sendMessage(e.target.value)
     }
 })
+
+
 function check1(message){
     let disPlay = document.querySelector('.word');
-    let w = disPlay.innerHTML;
-    console.log("w = " + w);
-    console.log("msg = " + message);
+    let w = disPlay.innerHTML.trim();
+    let m=message.trim();
+   
     let crct = {
         user: name,
-        message: '${name} guessed correctly'
+        message: name+' guessed correct answer'
     }
-    if(message === w){
-        console.log("correct");
-        io.emit('message' , crct);
+    if(m === w){
+        correct(crct,"correct")
+        io.emit('correct', crct)
     }
 }
 
+//correct
+function correct(msg,type){
+    let mainDiv = document.createElement('div')
+    let className = type
+    mainDiv.classList.add(className, 'message')
+
+    let markup = `
+        <p>${msg.message}</p>
+    `
+    mainDiv.innerHTML = markup
+    messageArea.appendChild(mainDiv)
+}
+
+//Messages
 function sendMessage(message) {
-    check1(message);
+   
     let msg = {
         user: name,
         message: message.trim()
@@ -301,6 +328,7 @@ function sendMessage(message) {
 
     // Send to server 
     io.emit('message', msg)
+    check1(message);
 
 }
 
@@ -317,10 +345,24 @@ function appendMessage(msg, type) {
     messageArea.appendChild(mainDiv)
 }
 
+
+
 // Recieve messages 
 io.on('message', (msg) => {
     appendMessage(msg, 'incoming')
     scrollToBottom()
+})
+io.on('correct', (crct) => {
+    correct(crct, 'correct')
+    scrollToBottom()
+})
+io.on('h1',(w)=>{
+    let word = document.querySelector('.chosen');
+    h1(word,w);
+})
+
+io.on('time',(timeSecond)=>{
+    timer(timeSecond);
 })
 
 function scrollToBottom() {
