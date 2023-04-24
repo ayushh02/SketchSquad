@@ -42,6 +42,15 @@ socket.on('time', (timeSecond) => {
   socket.broadcast.emit('time', timeSecond)
 })
 
+socket.on('score', (scr) => {
+  socket.broadcast.emit('score',scr)
+})
+
+socket.on('update', (y) => {
+  socket.broadcast.emit('update',y)
+})
+
+
   socket.on("disconnect", (reason) => {
     console.log(`${socket.id} is disconnected`);
     connections = connections.filter((con) => con.id !== socket.id);
@@ -54,7 +63,6 @@ let PORT = process.env.YOUR_PORT || process.env.PORT || 8050;
 http.listen(PORT, () => {
     console.log('server started on port'+ PORT);
 });
-
 
 
 
