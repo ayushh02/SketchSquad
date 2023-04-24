@@ -430,3 +430,10 @@ textarea {
     color: #333;
     font-size: 14px;
 }
+.correct{
+    margin:0 auto;
+    
+}
+.correct p{
+    color: rgb(28, 231, 28);
+}
