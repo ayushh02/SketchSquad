@@ -8,22 +8,26 @@
     <title>Home</title>
 </head>
 <body>
+    <!--Logo-->
+    <div class="logo">
+        <img src="./images/logo1.png" alt="" class="logoimg">
+    </div>
+
         <div class="content">
             <div class="container1">
                 <h1>Join Lobby</h1>
-    
-                    <label>Username</label><br>
-                    <input type="text" id="username"/><br>
-                    <label>Lobby Password</label><br>
-                    <input type="password" id="pswd"/><br>
-                    <button type="submit" onclick="join()" class="join">Join</button>
-                    
-             
+                <label>Username</label><br>
+                <input type="text" id="username"/><br>
+                <button type="submit" onclick="join()" class="join">Join</button>
             </div>
         </div>
         
+
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.6.1/socket.io.js"></script>
     <script type="javascript" src="./index.js"></script>
-    <script src="./script.js"></script>
+    <script type="text/javascript" src="./script.js"></script>
+      
+</script>
 </body>
 </html>
