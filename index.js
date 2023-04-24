@@ -30,19 +30,27 @@ io.on("connect", (socket) => {
     socket.broadcast.emit('message', msg)
 })
 
+socket.on('correct', (crct) => {
+  socket.broadcast.emit('correct', crct)
+})
+
+socket.on('h1', (w) => {
+  socket.broadcast.emit('h1',w)
+})
+
+socket.on('time', (timeSecond) => {
+  socket.broadcast.emit('time', timeSecond)
+})
+
   socket.on("disconnect", (reason) => {
     console.log(`${socket.id} is disconnected`);
     connections = connections.filter((con) => con.id !== socket.id);
   });
 });
 
-// io.on('connection', (socket) => {
-//   console.log('Connected...')
-    
-// })
 app.use(express.static("public"));
 
-let PORT = process.env.YOUR_PORT || process.env.PORT || 8000;
+let PORT = process.env.YOUR_PORT || process.env.PORT || 8050;
 http.listen(PORT, () => {
     console.log('server started on port'+ PORT);
 });
