@@ -335,6 +335,7 @@ ul{
 
 }
 .scores{
+    
     position: absolute;
     bottom: 0;
     background: rgba(172, 255, 47, 0);
@@ -343,6 +344,9 @@ ul{
     padding-top: 6px;
 }
 .players{
+    display: flex;
+    justify-content: center;
+    align-items: center;    
     width: 98.2%;
     margin-left: 1.6vh;
     margin-right: 2vh;
@@ -436,4 +440,10 @@ textarea {
 }
 .correct p{
     color: rgb(28, 231, 28);
+}
+.score{
+    background: crimson;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
 }
