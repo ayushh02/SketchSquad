@@ -260,23 +260,18 @@ function h1(word,w){
 //JOIN
 
 function join(){
-        let username = document.getElementById("username").value;
         window.location.href = './GamingArena.html';
-        console.log(username)
-    if(username.length == 0){
-        return;
-    }
-    name=username;
 }
 
 
 //chat
 let name;
+let score = 0;
 let textarea = document.querySelector('#textarea')
 let messageArea = document.querySelector('.message__area')
- do {
+do{
     name = prompt('Please enter your name: ')
- } while(!name)
+} while(!name)
 
 textarea.addEventListener('keyup', (e) => {
     if(e.key === 'Enter') {
@@ -289,14 +284,22 @@ function check1(message){
     let disPlay = document.querySelector('.word');
     let w = disPlay.innerHTML.trim();
     let m=message.trim();
-   
+    let x = score; 
     let crct = {
         user: name,
         message: name+' guessed correct answer'
     }
     if(m === w){
+        let y = x+10;
+        let up = {
+            user: name,
+            score: y
+        }
+
         correct(crct,"correct")
         io.emit('correct', crct)
+        updatescore(up);
+        io.emit('update',y);
     }
 }
 
@@ -346,6 +349,46 @@ function appendMessage(msg, type) {
 }
 
 
+//score 
+function sendData(score) {
+   
+    let scr = {
+        user: name,
+        score: score
+    }
+    // Append 
+    updateuser(scr, 'score')
+    
+
+    // Send to server 
+    io.emit('score',scr);
+
+}
+let scoreArea = document.querySelector('.players');
+function updateuser(scr,type1){
+
+    let uDiv = document.createElement('div')
+    let className = type1
+    uDiv.classList.add(className, 'score')
+
+    let markup = `
+        <h4>${scr.user}</h4>
+        <p>Score: ${scr.score}</p>
+    `
+    uDiv.innerHTML = markup
+    scoreArea.appendChild(uDiv)
+
+}
+sendData(score);
+
+function updatescore(up){
+    let y = document.querySelector(".score");
+    y.innerHTML = `
+        <h4>${up.user}</h4>
+        <p>Score: ${up.score}</p>
+    `
+
+}
 
 // Recieve messages 
 io.on('message', (msg) => {
@@ -363,6 +406,12 @@ io.on('h1',(w)=>{
 
 io.on('time',(timeSecond)=>{
     timer(timeSecond);
+})
+io.on('score',(score)=>{
+    updateuser(score,'score');
+})
+io.on('update',(y)=>{
+    updateuser(score,'score');
 })
 
 function scrollToBottom() {
