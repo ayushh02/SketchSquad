@@ -355,6 +355,7 @@ ul{
     border-radius: 22px 22px 22px 22px;
     background: white;
     border: 3px black solid;
+    position: relative;
 }
 
 /*chat
@@ -453,4 +454,26 @@ textarea {
     width: 75px;
     height: 75px;
     border-radius: 50px;
+    margin: 0 15px;
+}
+
+.score h4{
+    font-size: 20px;
+}
+.score p{
+    font-size: 16px;
+}
+
+.header{
+    position: absolute;
+    left: 30px;
+    border-right: 8px double black;
+    padding: 30px 5px;
+}
+
+.header p{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 30px;
+    font-weight: bold;
+    padding-right:20px ;
 }
