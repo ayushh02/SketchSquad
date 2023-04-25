@@ -179,6 +179,7 @@ canvas.addEventListener("mouseup", () => isDrawing = false);
 
 //TIMER
 function timer(time){
+    sendData(score);
     let timeSecond = time;
    
 const timeH = document.querySelector("#timer");
@@ -246,6 +247,7 @@ chosen.addEventListener('click', function(){
     let timeSecond=60;
     io.emit('time',timeSecond);
     timer(timeSecond);
+    
 
 })
 
@@ -267,6 +269,10 @@ function join(){
 //chat
 let name;
 let score = 0;
+let update={
+    user: name,
+    score: score
+}
 let textarea = document.querySelector('#textarea')
 let messageArea = document.querySelector('.message__area')
 do{
@@ -284,7 +290,7 @@ function check1(message){
     let disPlay = document.querySelector('.word');
     let w = disPlay.innerHTML.trim();
     let m=message.trim();
-    let x = score; 
+    let x = update.score; 
     let crct = {
         user: name,
         message: name+' guessed correct answer'
@@ -295,10 +301,10 @@ function check1(message){
             user: name,
             score: y
         }
-
+        update=up;
         correct(crct,"correct")
         io.emit('correct', crct)
-        updatescore(up);
+        updatescore(update);
         io.emit('update',y);
     }
 }
@@ -332,6 +338,7 @@ function sendMessage(message) {
     // Send to server 
     io.emit('message', msg)
     check1(message);
+   
 
 }
 
@@ -356,20 +363,25 @@ function sendData(score) {
         user: name,
         score: score
     }
-    // Append 
-    updateuser(scr, 'score')
+    // Append setTimeout(
+        setTimeout(
+    updateuser(scr, 'score'),10000);
     
 
     // Send to server 
-    io.emit('score',scr);
+    
+    io.emit('score',scr)
 
 }
+
+
 let scoreArea = document.querySelector('.players');
+
 function updateuser(scr,type1){
 
     let uDiv = document.createElement('div')
     let className = type1
-    uDiv.classList.add(className, 'score')
+    uDiv.classList.add(className, 'score'+scr.user)
 
     let markup = `
         <h4>${scr.user}</h4>
@@ -379,13 +391,15 @@ function updateuser(scr,type1){
     scoreArea.appendChild(uDiv)
 
 }
-sendData(score);
 
-function updatescore(up){
-    let y = document.querySelector(".score");
+//sendData(score)
+
+
+function updatescore(update){
+    let y = document.querySelector(".score"+update.user);
     y.innerHTML = `
-        <h4>${up.user}</h4>
-        <p>Score: ${up.score}</p>
+        <h4>${update.user}</h4>
+        <p>Score: ${update.score}</p>
     `
 
 }
@@ -411,7 +425,7 @@ io.on('score',(score)=>{
     updateuser(score,'score');
 })
 io.on('update',(y)=>{
-    updateuser(score,'score');
+    updatescore(update);
 })
 
 function scrollToBottom() {
