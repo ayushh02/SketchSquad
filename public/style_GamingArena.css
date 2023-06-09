@@ -335,14 +335,18 @@ ul{
 
 }
 .scores{
+    
     position: absolute;
-bottom: 0;
+    bottom: 0;
     background: rgba(172, 255, 47, 0);
     height: 14.5vh;
     width: 100%;
     padding-top: 6px;
 }
 .players{
+    display: flex;
+    justify-content: center;
+    align-items: center;    
     width: 98.2%;
     margin-left: 1.6vh;
     margin-right: 2vh;
@@ -351,12 +355,13 @@ bottom: 0;
     border-radius: 22px 22px 22px 22px;
     background: white;
     border: 3px black solid;
+    position: relative;
 }
 
-/*chat*/
+/*chat
 .chat{
    
-}
+}*/
 section.chat__section {
     height: 100%;
     width: 100%;
@@ -367,24 +372,23 @@ section.chat__section {
 .brand {
    
     padding: 23px;
-    background: #f1f1f1;
+    background: #ffffff;
     display: flex;
     align-items: center;
     border: 3px solid black;
     border-radius: 22px 22px 0 0 ;
 }
 .brand h1 {
-    
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     text-transform: uppercase;
-    font-size: 20px;
-    color: #444;
+    font-size: 18px;
+    color: #141313;
     margin-left: 10px;
 }
 .message__area{
     border: 3px solid black;
-   margin-top: 3px;
-   margin-bottom: 3px;
-
+    margin-top: 3px;
+    margin-bottom: -3px;
     height: 77%;
     padding: 16px;
     display: flex;
@@ -403,7 +407,7 @@ textarea {
     padding: 18px;
     font-size: 16px;
     outline: none;
-    background: #FBFBFB;
+    background: #ffffff;
 }
 
 .message {
@@ -414,13 +418,13 @@ textarea {
     position: relative;
 }
 .incoming {
-    background: #f9e076;
-    color: #fff;  
+    background: #ffe460;
+    color: #ffffff;  
     font-weight: bolder;
 }
 .outgoing {
-    background: #dadada;
-    color: #fff;  
+    background: #ffb941;
+    color: #ffffff;  
     font-weight: bolder;
     margin-left: auto;
 }
@@ -430,4 +434,46 @@ textarea {
     left: 0;
     color: #333;
     font-size: 14px;
+}
+.correct{
+    margin:0 auto;
+    
+}
+.correct p{
+    color: rgb(28, 231, 28);
+}
+.score{
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    flex-direction: column;  
+    background: rgb(255, 210, 48);
+    border: 3px solid rgb(26, 26, 25);
+    color: rgb(23, 22, 22);
+    font-size: 18px;
+    width: 75px;
+    height: 75px;
+    border-radius: 50px;
+    margin: 0 15px;
+}
+
+.score h4{
+    font-size: 20px;
+}
+.score p{
+    font-size: 16px;
+}
+
+.header{
+    position: absolute;
+    left: 30px;
+    border-right: 8px double black;
+    padding: 30px 5px;
+}
+
+.header p{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 30px;
+    font-weight: bold;
+    padding-right:20px ;
 }
