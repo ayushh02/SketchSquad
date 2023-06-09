@@ -1,10 +1,9 @@
-
 let canvas = document.getElementById("canvas");
 
-canvas.width = 0.98 * window.innerWidth;
-canvas.height = window.innerHeight;
+canvas.width = canvas.offsetWidth;
+canvas.height = canvas.offsetHeight;
 
-var io = io.connect("https://localhost:8090/GamingArena.html");
+var io = io.connect();
 
 let ctx = canvas.getContext("2d");
 
@@ -33,8 +32,8 @@ io.on('ondown' , ({x,y}) => {
 })
 
 window.onmousemove = (e) => {
-  x = e.clientX;
-  y = e.clientY;
+  x = e.offsetX;
+  y = e.offsetY;
 
   if (mouseDown) {
     io.emit("draw", { x,y });
@@ -179,8 +178,10 @@ canvas.addEventListener("mouseup", () => isDrawing = false);
 */
 
 //TIMER
-function timer(){
-    let timeSecond = 60;
+function timer(time){
+    sendData(score);
+    let timeSecond = time;
+   
 const timeH = document.querySelector("#timer");
 
 displayTime(timeSecond);
@@ -212,6 +213,7 @@ function togglePopup(){
     document.getElementById("popup-1").classList.toggle("active");
 }
 
+let check;
 //Random word generator
 let btn = document.querySelector(".next");
 btn.addEventListener('click', function(){
@@ -225,10 +227,15 @@ btn.addEventListener('click', function(){
         "juice"
     ];
     let disPlay = document.querySelector('.word');
-    disPlay.innerHTML = arr[Math.floor(Math.random()*arr.length)];;
+
+    disPlay.innerHTML = arr[Math.floor(Math.random()*arr.length)];
+    check = disPlay.innerHTML;
     console.log(disPlay.innerHTML);
 })
+console.log("check = " + check);
+
 //display chosen word
+
 let chosen = document.querySelector(".done");
 chosen.addEventListener('click', function(){
     togglePopup();
@@ -236,34 +243,41 @@ chosen.addEventListener('click', function(){
     let word = document.querySelector('.chosen');
     let w = disPlay.innerHTML;
     let text = w.charAt(0) + ' _ '.repeat(w.length - 2) + w.charAt(w.length - 1);
-    word.innerHTML = text;
-    console.log(word.innerHTML);
-
-    timer();
+    h1(word,w);
+    let timeSecond=60;
+    io.emit('time',timeSecond);
+    timer(timeSecond);
+    
 
 })
+
+function h1(word,w){
+    let disPlay = document.querySelector('.word');
+    disPlay.innerHTML=w;
+    let text = w.charAt(0) + ' _ '.repeat(w.length - 2) + w.charAt(w.length - 1);
+    word.innerHTML = text;
+    io.emit("h1",w);
+}
 
 //JOIN
 
 function join(){
-        let username = document.getElementById("username").value;
         window.location.href = './GamingArena.html';
-        console.log(username)
-    if(username.length == 0){
-        return;
-    }
-    name=username;
 }
 
 
 //chat
-const socket = io()
 let name;
+let score = 0;
+let update={
+    user: name,
+    score: score
+}
 let textarea = document.querySelector('#textarea')
 let messageArea = document.querySelector('.message__area')
-// do {
-//     name = prompt('Please enter your name: ')
-// } while(!name)
+do{
+    name = prompt('Please enter your name: ')
+} while(!name)
 
 textarea.addEventListener('keyup', (e) => {
     if(e.key === 'Enter') {
@@ -271,7 +285,46 @@ textarea.addEventListener('keyup', (e) => {
     }
 })
 
+
+function check1(message){
+    let disPlay = document.querySelector('.word');
+    let w = disPlay.innerHTML.trim();
+    let m=message.trim();
+    let x = update.score; 
+    let crct = {
+        user: name,
+        message: name+' guessed correct answer'
+    }
+    if(m === w){
+        let y = x+10;
+        let up = {
+            user: name,
+            score: y
+        }
+        update=up;
+        correct(crct,"correct")
+        io.emit('correct', crct)
+        updatescore(update);
+        io.emit('update',y);
+    }
+}
+
+//correct
+function correct(msg,type){
+    let mainDiv = document.createElement('div')
+    let className = type
+    mainDiv.classList.add(className, 'message')
+
+    let markup = `
+        <p>${msg.message}</p>
+    `
+    mainDiv.innerHTML = markup
+    messageArea.appendChild(mainDiv)
+}
+
+//Messages
 function sendMessage(message) {
+   
     let msg = {
         user: name,
         message: message.trim()
@@ -280,9 +333,12 @@ function sendMessage(message) {
     appendMessage(msg, 'outgoing')
     textarea.value = ''
     scrollToBottom()
+    console.log(message);
 
     // Send to server 
-    socket.emit('message', msg)
+    io.emit('message', msg)
+    check1(message);
+   
 
 }
 
@@ -299,10 +355,77 @@ function appendMessage(msg, type) {
     messageArea.appendChild(mainDiv)
 }
 
+
+//score 
+function sendData(score) {
+   
+    let scr = {
+        user: name,
+        score: score
+    }
+    // Append setTimeout(
+        setTimeout(
+    updateuser(scr, 'score'),10000);
+    
+
+    // Send to server 
+    
+    io.emit('score',scr)
+
+}
+
+
+let scoreArea = document.querySelector('.players');
+
+function updateuser(scr,type1){
+
+    let uDiv = document.createElement('div')
+    let className = type1
+    uDiv.classList.add(className, 'score'+scr.user)
+
+    let markup = `
+        <h4>${scr.user}</h4>
+        <p>Score: ${scr.score}</p>
+    `
+    uDiv.innerHTML = markup
+    scoreArea.appendChild(uDiv)
+
+}
+
+//sendData(score)
+
+
+function updatescore(update){
+    let y = document.querySelector(".score"+update.user);
+    y.innerHTML = `
+        <h4>${update.user}</h4>
+        <p>Score: ${update.score}</p>
+    `
+
+}
+
 // Recieve messages 
-socket.on('message', (msg) => {
+io.on('message', (msg) => {
     appendMessage(msg, 'incoming')
     scrollToBottom()
+})
+io.on('correct', (crct) => {
+    correct(crct, 'correct')
+    scrollToBottom()
+})
+io.on('h1',(w)=>{
+    let word = document.querySelector('.chosen');
+    h1(word,w);
+})
+
+io.on('time',(timeSecond)=>{
+    timer(timeSecond);
+})
+io.on('score',(score)=>{
+    updateuser(score,'score');
+})
+io.on('update',(y)=>{
+    updatescore(update);
 })
 
 function scrollToBottom() {
